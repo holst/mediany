@@ -1,0 +1,16 @@
+{
+  "name": "Mediany",
+  "version": "1.0.0",
+  "description": "Declarative JavaScript event listening using media queries",
+  "main": "src/mediany.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {},
+  "keywords": [
+    "responsive",
+    "media",
+    "query"
+  ],
+  "author": "Jonathan Holst",
+  "license": "MIT"
+}
