@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Mediany by holst</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Mediany</h1>
+          <h2>Mediany</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/holst/mediany/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/holst/mediany/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/holst/mediany" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <p>Mediany is a dependency-free library for JavaScript event listening with the same principles as underlies responsive web design: Declarative behaviour at different media query breakpoints.</p>
+
+<h2>
+<a id="philosophy" class="anchor" href="#philosophy" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Philosophy</h2>
+
+<p>Ethan Marcotte revolutionised the way websites were developed when in 2010 he published the article '<a href="http://alistapart.com/article/responsive-web-design">Response Web Design</a>' on A List Apart. Instead of making dedicated mobile and desktop websites, one should adapt the CSS (let it 'respond') to the dimensions and capabilities of the user agent's viewport using media queries.</p>
+
+<p>Mediany tries to apply those same principles to JavaScript: Adding and removing event listeners based on the viewport's specifications. If the user resizes their window, the rules are re-applied according to the new media query.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>You can get it from npm:</p>
+
+<pre><code>npm install mediany
+</code></pre>
+
+<p>Or you can download the <a href="http://mediany.holst.io/latest.min.js">compressed version</a>.</p>
+
+<h2>
+<a id="no-polyfills" class="anchor" href="#no-polyfills" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>No polyfills</h2>
+
+<p>Mediany has no dependencies, but it does depend on some browser APIs:</p>
+
+<ul>
+<li>
+<code>addEventListener</code> and <code>removeEventListener</code>
+</li>
+<li><code>Array.prototype.forEach</code></li>
+<li><code>document.querySelectorAll</code></li>
+<li><code>window.matchMedia</code></li>
+</ul>
+
+<p><strong>No polyfills are supplied</strong>. All of the above are feature detected, so if you otherwise follow progressive enhancement ideals, you should be fine if the user's browser doesn't support one or more of these, but be advised. You are of course welcome to supply polyfills of your own.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Mediany declares a very simple API: a function named <code>mediany</code>, which takes a <code>mediaQuery</code> parameter. Then an object is returned with a single method: <code>handle</code>. It takes three parameters: <code>selector</code>, <code>event</code> and <code>callback</code>.</p>
+
+<p>To apply a special click handler for links on TVs you can use:</p>
+
+<pre><code>mediany('tv').handle('a', 'click', function (event) {
+    /* Handling here */
+});
+</code></pre>
+
+<p>You can chain calls and handle multiple different events at the same break point:</p>
+
+<pre><code>mediany('(min-width: 500px)')
+    .handle('a', 'click', function (event) {})
+    .handle('button', 'click', function (event) {})
+    .handle('form', 'submit', function (event) {});
+</code></pre>
+
+<p>To handle multiple different media queries, you can make successive <code>mediany</code> calls:</p>
+
+<pre><code>mediany('(min-width: 1000px)').handle('a', 'click', function (event) {});
+mediany('(max-height: 800px)').handle('a', 'click', function (event) {});
+</code></pre>
+
+<p>Unlike CSS, handlers aren't overridden. So you can combine multiple handlers:</p>
+
+<pre><code>mediany('(min-width: 800px)').handle('a', 'click', function (event) {
+    lightboxLibrary.open();
+});
+
+mediany('(min-width: 1000px)').handle('a', 'click', function (event) {
+    lightboxLibrary.addHeadline();
+});
+</code></pre>
+
+<p>The order in which they will fire will be determined by definition order: first in, first out.</p>
+
+<p>This also means that if you want to prevent two handlers from firing at the same time, you need to ensure both min- and max:</p>
+
+<pre><code>mediany('(min-width: 800px) and (max-width: 999px)')
+    .handle('a', 'click', function (event) {});
+
+mediany('(min-width: 1000px)').handle('a', 'click', function (event) {});
+</code></pre>
+
+<h2>
+<a id="what-it-doesnt-do" class="anchor" href="#what-it-doesnt-do" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What it doesn't do</h2>
+
+<ul>
+<li>Tell you when moving from one breakpoint to another. You can look to <a href="https://github.com/nygardk/BreakJS">BreakJS</a> or other tools for that.</li>
+<li>Anything useful in Node.JS environments. This library is only really useful in browsers.</li>
+</ul>
+        </section>
+
+        <footer>
+          Mediany is maintained by <a href="https://github.com/holst">holst</a><br>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
